@@ -17,6 +17,9 @@ backend/.env
 backend/.env.example
 backend/credentials.json
 
+# Temp files
+backend/creds_b64.txt
+
 # Python cache
 __pycache__/
 *.pyc
