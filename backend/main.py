@@ -35,17 +35,12 @@ UNSUBSCRIBE_URL      = os.getenv("UNSUBSCRIBE_URL", "https://ayxnt.com/unsubscri
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(title=f"{APP_NAME} Waitlist API")
 
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost:5173"   # default for local dev
-).split(",")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 
