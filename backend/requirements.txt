@@ -1,0 +1,8 @@
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic[email]==2.10.4
+python-dotenv==1.0.1
+requests==2.32.3
+gspread==6.1.4
+google-auth==2.37.0
+sib-api-v3-sdk==7.6.0

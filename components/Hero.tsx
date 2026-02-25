@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 
+// Change this to your deployed backend URL when going to production
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const Hero = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 50,
@@ -8,7 +11,10 @@ const Hero = () => {
     minutes: 0,
     seconds: 0,
   });
+  const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     // Set target date to 50 days from now
@@ -35,9 +41,26 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${API_URL}/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || "Something went wrong. Please try again.");
+      }
+      setIsSubmitted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -75,19 +98,26 @@ const Hero = () => {
             </p>
 
             <form className="flex flex-col sm:flex-row gap-3 w-full max-w-[480px]" onSubmit={handleSubmit}>
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="flex-1 px-6 py-3.5 bg-[#111111]/45 backdrop-blur-sm border border-white/10 rounded-full text-white placeholder-white/40 font-inter font-light text-sm focus:outline-none focus:border-white/30 transition-all"
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 px-6 py-3.5 bg-[#111111]/45 backdrop-blur-sm border border-white/10 rounded-full text-white placeholder-white/40 font-inter font-light text-sm focus:outline-none focus:border-white/30 transition-all disabled:opacity-50"
                 required
+                disabled={isLoading}
               />
-              <button 
-                type="submit" 
-                className="px-8 py-3.5 bg-white text-black font-inter font-medium text-sm rounded-full hover:bg-gray-100 transition-colors cursor-pointer whitespace-nowrap"
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-8 py-3.5 bg-white text-black font-inter font-medium text-sm rounded-full hover:bg-gray-100 transition-colors cursor-pointer whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Join Now
+                {isLoading ? "Joining..." : "Join Now"}
               </button>
             </form>
+            {error && (
+              <p className="mt-3 text-red-400 font-inter text-sm font-light">{error}</p>
+            )}
           </>
         ) : (
           <div className="flex flex-col items-center animate-in fade-in zoom-in duration-500">

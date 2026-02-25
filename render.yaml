@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: ayxnt-waitlist-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: BREVO_SMTP_LOGIN
+        sync: false
+      - key: BREVO_SMTP_KEY
+        sync: false
+      - key: SENDER_EMAIL
+        sync: false
+      - key: GOOGLE_SHEET_ID
+        sync: false
+      - key: GOOGLE_CREDS_JSON
+        sync: false
+      - key: APP_NAME
+        value: Ayxnt
+      - key: APP_SITE_URL
+        value: https://ayxnt.com
+      - key: UNSUBSCRIBE_URL
+        value: https://ayxnt.com/unsubscribe

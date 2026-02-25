@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:backend": "cd backend && python -m uvicorn main:app --reload --port 8000",
+    "dev:all": "concurrently -n frontend,backend -c cyan,yellow \"npm run dev\" \"npm run dev:backend\"",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "lucide-react": "^0.575.0",
@@ -16,7 +19,9 @@
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.1.2",
     "typescript": "~5.8.2",
+    "vercel": "^39.3.0",
     "vite": "^6.2.0"
   }
 }
