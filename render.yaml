@@ -20,6 +20,8 @@ services:
         sync: false
       - key: GOOGLE_CREDS_JSON
         sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
       - key: APP_NAME
         value: Ayxnt
       - key: APP_SITE_URL
